@@ -15,14 +15,15 @@ func main() {
 	var data tabMakanan
 	var nData, pilihmenu int
 	var nama, x string
+	menu()
 	for pilihmenu != 8 {
-		menu()
 		fmt.Print("Pilih opsi dari nomor 1 - 8: ")
 		fmt.Scanln(&pilihmenu)
 		switch pilihmenu {
 		case 1:
+			fmt.Print("Masukkan banyaknya data bahan makanan yang akan dimasukkan: ")
 			fmt.Scan(&nData)
-			inputBahan(&data, &nData)
+			inputBahan(&data, &nData) 
 		case 2:
 			ubahData(&data, &nData)
 		case 3:
@@ -58,18 +59,19 @@ func menu() {
 func inputBahan(T *tabMakanan, n *int) {
 	for i := 0; i < *n; i++ {
 		fmt.Print("Masukkan nama bahan: ")
-		fmt.Scan(&T[i].nama, "\n")
-		fmt.Print("Masukkan tanggal kadaluarsa (dd - mm - yy): ")
-		fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun, "\n")
+        fmt.Scan(&T[i].nama)
+        fmt.Print("Masukkan stok: ")
+        fmt.Scan(&T[i].stok)
+        fmt.Print("Masukkan tanggal kadaluarsa (dd mm yy): ")
+        fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
 	}
 }
 
 func cetakBahan(T tabMakanan, n int) {
 	for i := 0; i < n; i++ {
-		fmt.Print("Nama: ")
-		fmt.Printf(T[i].nama, "\n")
-		fmt.Print("Tanggal Kadaluarsa (dd - mm - yy): ")
-		fmt.Print(T[i].tanggal, T[i].bulan, T[i].tahun, "\n")
+		fmt.Printf("Nama: %s\n", T[i].nama)
+        fmt.Printf("Stok: %d\n", T[i].stok)
+        fmt.Printf("Tanggal Kadaluarsa (dd - mm - yy): %02d - %02d - %02d\n", T[i].tanggal, T[i].bulan, T[i].tahun)
 	}
 }
 
