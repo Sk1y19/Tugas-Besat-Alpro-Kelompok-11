@@ -36,6 +36,7 @@ func main() {
 		case 4:
 			kadaluarsa(&data, &nData)
 		case 5:
+		    fmt.Print("Masukkan nama bahan makanan: ")
 			fmt.Scan(&x)
 			cariBahan(data, nData, x)
 		case 6:
@@ -151,7 +152,7 @@ func ubahData(tab *tabMakanan, n *int, id string) {
 		fmt.Scan(&tab[idx].nama)
 		fmt.Print("Ubah stok yang baru (kalau sama pakai jumlah stok lama): ")
 		fmt.Scan(&tab[idx].stok)
-		fmt.Print("Silakan masukkan tanggal kadaluarsa yang baru: (dd mm yy)")
+		fmt.Print("Silakan masukkan tanggal kadaluarsa yang baru (dd mm yy): ")
 		fmt.Scan(&tab[idx].tanggal, &tab[idx].bulan, &tab[idx].tahun)
 	}
 }
@@ -169,24 +170,24 @@ func kadaluarsa(tab *tabMakanan, n *int) {
 		}
 	}
 	if found == false {
-		fmt.Println("Tidak ada bahan makanan yang mendekari tanggal kadaluarsa")
+		fmt.Println("Tidak ada bahan makanan yang mendekati tanggal kadaluarsa")
 	}
 }
 
 func cariBahan(T tabMakanan, n int, x string) {
-	var ketemu bool
-	var i int
-	ketemu = false
-	for !ketemu && i < n {
-		if T[i].nama == x {
-			fmt.Println("Data Ditemukan")
-			fmt.Printf("Nama bahan makanan: %s", T[i].nama)
-			fmt.Printf("Stok : %d", T[i].stok)
-			fmt.Printf("Tanggal Kadaluarsa (dd - mm - yy): ", T[i].tanggal, T[i].bulan, T[i].tahun)
-		} else {
-			fmt.Println("Data tidak ditemukan")
-		}
-	}
+    var ketemu bool
+    for i := 0; i < n; i++ {
+        if T[i].nama == x {
+            fmt.Println("Data Ditemukan")
+            fmt.Printf("Nama bahan makanan: %s\n", T[i].nama)
+            fmt.Printf("Stok: %d\n", T[i].stok)
+            fmt.Printf("Tanggal Kadaluarsa (dd - mm - yyyy): %02d - %02d - %04d\n", T[i].tanggal, T[i].bulan, T[i].tahun)
+            ketemu = true
+        }
+    }
+    if !ketemu {
+        fmt.Println("Data tidak ditemukan")
+    }
 }
 
 func InsertionSort(T *tabMakanan, n int) {
