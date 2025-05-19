@@ -5,7 +5,7 @@ package main
 import "fmt"
 
 type BahanMakanan struct {
-	nama, id                       string
+	nama, id                    string
 	stok, tanggal, bulan, tahun int
 }
 
@@ -19,19 +19,19 @@ func main() {
 	var id, x string
 	nData = 0
 	for pilihmenu != 8 {
-	  menu()
+		menu()
 		fmt.Print("Pilih opsi dari nomor 1 - 8: ")
 		fmt.Scanln(&pilihmenu)
 		switch pilihmenu {
 		case 1:
 			fmt.Print("Masukkan banyaknya data bahan makanan yang akan dimasukkan: ")
 			fmt.Scan(&n)
-			inputBahan(&data, n, &nData) 
+			inputBahan(&data, n, &nData)
 		case 2:
 			ubahData(&data, &nData, id)
 		case 3:
-		  fmt.Print("Masukkan id makanan: ")
-		  fmt.Scan(&id)
+			fmt.Print("Masukkan id makanan: ")
+			fmt.Scan(&id)
 			hapusData(&data, id, &nData)
 		case 4:
 			kadaluarsa(&data, &nData)
@@ -39,7 +39,7 @@ func main() {
 			fmt.Scan(&x)
 			cariBahan(data, nData, x)
 		case 6:
-		  cetakBahan(data, nData)
+			cetakBahan(data, nData)
 		case 7:
 			InsertionSort(&data, nData)
 			cetakBahan(data, nData)
@@ -62,26 +62,61 @@ func menu() {
 }
 
 func inputBahan(T *tabMakanan, n int, nData *int) {
-  var temp = *nData
-	for i := temp; i < temp + n; i++ {
-	    fmt.Print("Masukkan Id bahan makanan: ")
-	    fmt.Scan(&T[i].id)
-		  fmt.Print("Masukkan nama bahan (jangan gunakan spasi gunakan '_'): ")
-      fmt.Scan(&T[i].nama)
-      fmt.Print("Masukkan stok: ")
-      fmt.Scan(&T[i].stok)
-      fmt.Print("Masukkan tanggal kadaluarsa (dd mm yy): ")
-      fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
-      *nData++
+	var temp = *nData
+	var isTrue bool
+	isTrue = false
+	for i := temp; i < temp+n; i++ {
+		fmt.Print("Masukkan Id bahan makanan: ")
+		fmt.Scan(&T[i].id)
+		fmt.Print("Masukkan nama bahan (jangan gunakan spasi gunakan '_'): ")
+		fmt.Scan(&T[i].nama)
+		fmt.Print("Masukkan stok: ")
+		fmt.Scan(&T[i].stok)
+		fmt.Print("Masukkan tanggal kadaluarsa (dd m yyyy (untuk penulisan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
+		fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
+		for !isTrue {
+			if T[i].bulan >= 1 && T[i].bulan <= 2 {
+				if T[i].bulan == 1 || T[i].bulan == 3 || T[i].bulan == 5 || T[i].bulan == 7 || T[i].bulan == 9 || T[i].bulan == 11 {
+					if T[i].tanggal >= 01 && T[i].tanggal <= 31 {
+						isTrue = true
+					} else {
+						fmt.Println("Tanggal tidak valid")
+						fmt.Print("Masukkan tanggal kadaluarsa (dd m yyyy (untuk penulisan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
+						fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
+					}
+				} else if T[i].bulan == 4 || T[i].bulan == 6 || T[i].bulan == 8 || T[i].bulan == 10 || T[i].bulan == 12 {
+					if T[i].tanggal >= 1 && T[i].tanggal <= 30 {
+						isTrue = true
+					} else {
+						fmt.Println("Tanggal tidak valid")
+						fmt.Print("Masukkan tanggal kadaluarsa (dd m yyyy (untuk penulisan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
+						fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
+					}
+				} else if T[i].bulan == 2 {
+					if T[i].tanggal >= 1 && T[i].tanggal <= 28 {
+						isTrue = true
+					} else {
+						fmt.Println("Tanggal tidak valid")
+						fmt.Print("Masukkan tanggal kadaluarsa (dd m yyyy (untuk penulisan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
+						fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
+					}
+				}
+			} else {
+				fmt.Println("Bulan tidak valid")
+				fmt.Print("Masukkan tanggal kadaluarsa (dd m yyyy (untuk penulisan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
+				fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
+			}
+		}
+		*nData++
 	}
 }
 
 func cetakBahan(T tabMakanan, n int) {
 	for i := 0; i < n; i++ {
-	  fmt.Printf("id : %s\n", T[i].id)
+		fmt.Printf("id : %s\n", T[i].id)
 		fmt.Printf("Nama: %s\n", T[i].nama)
-    fmt.Printf("Stok: %d\n", T[i].stok)
-    fmt.Printf("Tanggal Kadaluarsa (dd - mm - yy): %02d - %02d - %02d\n", T[i].tanggal, T[i].bulan, T[i].tahun)
+		fmt.Printf("Stok: %d\n", T[i].stok)
+		fmt.Printf("Tanggal Kadaluarsa (dd - mm - yy): %02d - %02d - %02d\n", T[i].tanggal, T[i].bulan, T[i].tahun)
 	}
 }
 
@@ -105,16 +140,16 @@ func ubahData(tab *tabMakanan, n *int, id string) {
 	fmt.Print("Silakan masukkan id bahan yang ingin diubah datanya: ")
 	fmt.Scan(&id)
 	for i = 0; i <= *n && idx == -1; i++ {
-		if tab[i].id == id{
+		if tab[i].id == id {
 			idx = i
 		}
 	}
 	if idx == -1 {
 		fmt.Print("Id Data tidak ditemukan.")
 	} else {
-	  fmt.Print("Masukkan nama yang baru (jika tidak ingin diubah gunakan nama yang sudah ada): ")
-	  fmt.Scan(&tab[idx].nama)
-	  fmt.Print("Ubah stok yang baru (kalau sama pakai jumlah stok lama): ")
+		fmt.Print("Masukkan nama yang baru (jika tidak ingin diubah gunakan nama yang sudah ada): ")
+		fmt.Scan(&tab[idx].nama)
+		fmt.Print("Ubah stok yang baru (kalau sama pakai jumlah stok lama): ")
 		fmt.Scan(&tab[idx].stok)
 		fmt.Print("Silakan masukkan tanggal kadaluarsa yang baru: (dd mm yy)")
 		fmt.Scan(&tab[idx].tanggal, &tab[idx].bulan, &tab[idx].tahun)
@@ -122,19 +157,19 @@ func ubahData(tab *tabMakanan, n *int, id string) {
 }
 
 func kadaluarsa(tab *tabMakanan, n *int) {
-	var i, tanggal, bulan, tahun int
+	var i, tanggal, tahun, bulan int
 	var found bool
 	fmt.Print("Silakan masukkan tanggal saat ini: (dd mm yyyy): ")
 	fmt.Scan(&tanggal, &bulan, &tahun)
-found = false
+	found = false
 	for i = 0; i <= *n; i++ {
 		if ((tab[i].tanggal-tanggal <= -3 && tab[i].tanggal-tanggal <= 3) && tab[i].bulan == bulan && tab[i].tahun == tahun) || ((tab[i].bulan-bulan == 1 || bulan-tab[i].bulan == 1) && tab[i].tahun == tahun && (tab[i].tanggal-tanggal >= 25 || tanggal-tab[i].tanggal-tanggal >= 25)) {
 			fmt.Print("PERINGATAN: ", tab[i].nama, " AKAN SEGERA KADALUARSA PADA TANGGAL ", tab[i].tanggal, "/", tab[i].bulan, "/", tab[i].tahun)
-			  found = true
+			found = true
 		}
 	}
-	if found == false{
-	  fmt.Println("Tidak ada bahan makanan yang mendekari tanggal kadaluarsa")
+	if found == false {
+		fmt.Println("Tidak ada bahan makanan yang mendekari tanggal kadaluarsa")
 	}
 }
 
@@ -170,3 +205,4 @@ func InsertionSort(T *tabMakanan, n int) {
 		pass++
 	}
 }
+
