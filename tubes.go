@@ -1,3 +1,5 @@
+/*Note : program masih belu selesai masih ada beberapa fiture yang perlu di perbaiki*/
+
 package main
 
 import "fmt"
