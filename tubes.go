@@ -116,7 +116,6 @@ func cetakBahan(T tabMakanan, n int) {
 		fmt.Printf("Nama : %s\n", T[i].nama)
 		fmt.Printf("Stok : %d\n", T[i].stok)
 		fmt.Printf("Tanggal Kadaluarsa : %02d - %02d - %02d\n", T[i].tanggal, T[i].bulan, T[i].tahun)
-		fmt.Printf("---\n")
 	}
 }
 
