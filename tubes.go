@@ -16,7 +16,7 @@ func main() {
 	var nData, n, pilihmenu int
 	var id string
 	nData = 0
-	for pilihmenu != 8 {
+	for pilihmenu != 9 {
 		menu()
 		fmt.Print("Pilih opsi dari nomor 1 - 8: ")
 		fmt.Scan(&pilihmenu)
@@ -42,7 +42,9 @@ func main() {
 		case 7:
 			cetakBahan(InsertionSort(data, nData), nData)
 		case 8:
-			fmt.Println("Berhasil Log Out")
+			selectionSort(data, nData)
+		case 9:
+			cetakBahan(selectionSort(data, nData), nData)
 		}
 	}
 }
@@ -55,8 +57,9 @@ func menu() {
 	fmt.Println("4. Daftar Bahan Makanan")
 	fmt.Println("5. Cek Bahan Yang Mendekati Kadaluarsa atau Telah Kadaluarsa")
 	fmt.Println("6. Cari Bahan Makanan Berdasarkan ID")
-	fmt.Println("7. Daftar Bahan Makanan Menurut Berdasarkan Tanggal Kadaluarsa")
-	fmt.Println("8. Exit")
+	fmt.Println("7. Daftar Bahan Makanan Urut Secara Menaik Berdasarkan Tanggal Kadaluarsa")
+	fmt.Println("8. Daftar Bahan Makanan Urut Secara Menurun Berdasarkan Jumlah Stok")
+	fmt.Println("9. Exit")
 }
 
 func inputBahan(T *tabMakanan, n int, nData *int) {
@@ -74,6 +77,7 @@ func inputBahan(T *tabMakanan, n int, nData *int) {
 		fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
 		for !isTrue {
 			if T[i].bulan >= 1 && T[i].bulan <= 12 {
+					isTrue = true
 				if T[i].bulan == 1 || T[i].bulan == 3 || T[i].bulan == 5 || T[i].bulan == 7 || T[i].bulan == 9 || T[i].bulan == 11 {
 					if T[i].tanggal >= 01 && T[i].tanggal <= 31 {
 						isTrue = true
@@ -144,7 +148,7 @@ func ubahData(tab *tabMakanan, n *int, id string) {
 		}
 	}
 	if idx == -1 {
-		fmt.Print("Id Data tidak ditemukan.")
+		fmt.Print("Id Data tidak ditemukan.\n")
 	} else {
 		fmt.Print("Masukkan nama yang baru (jika tidak ingin diubah gunakan nama yang sudah ada): ")
 		fmt.Scan(&tab[idx].nama)
@@ -181,6 +185,7 @@ func cariBahan(T tabMakanan, n int, id string) {
 	for i := 0; i < n; i++ {
 		if T[i].id == id {
 			fmt.Println("Data Ditemukan")
+			fmt.Println("--------------")
 			fmt.Printf("Nama bahan makanan: %s\n", T[i].nama)
 			fmt.Printf("Stok: %d\n", T[i].stok)
 			fmt.Printf("Tanggal Kadaluarsa (dd - mm - yyyy): %02d - %02d - %04d\n", T[i].tanggal, T[i].bulan, T[i].tahun)
@@ -205,6 +210,28 @@ func InsertionSort(T tabMakanan, n int) tabMakanan {
 			i--
 		}
 		T[i].tanggal = temp.tanggal
+		pass++
+	}
+	return T
+}
+
+func selectionSort(T tabMakanan, n int)tabMakanan{
+	var i, idx, pass int
+	var temp int
+	
+	pass = 1
+	for pass < n{
+		idx = pass - 1
+		i = pass
+		for i < n{
+			if T[i].stok > T[idx].stok{
+				idx = i
+			}
+			i++
+		}
+		temp = T[pass - 1].stok
+		T[pass - 1].stok = T[idx].stok
+		T[idx].stok = temp
 		pass++
 	}
 	return T
