@@ -18,7 +18,7 @@ func main() {
 	nData = 0
 	for pilihmenu != 9 {
 		menu()
-		fmt.Print("Pilih opsi dari nomor 1 - 8: ")
+		fmt.Print("Pilih opsi dari nomor 1 - 9q: ")
 		fmt.Scan(&pilihmenu)
 		switch pilihmenu {
 		case 1:
@@ -42,9 +42,11 @@ func main() {
 		case 7:
 			cetakBahan(InsertionSort(data, nData), nData)
 		case 8:
-			selectionSort(data, nData)
-		case 9:
 			cetakBahan(selectionSort(data, nData), nData)
+		case 9:
+			fmt.Println("Log out berhasil")
+		default:
+			fmt.Println("Pilihan harus 1 - 9")
 		}
 	}
 }
@@ -73,40 +75,37 @@ func inputBahan(T *tabMakanan, n int, nData *int) {
 		fmt.Scan(&T[i].nama)
 		fmt.Print("Masukkan stok: ")
 		fmt.Scan(&T[i].stok)
-		fmt.Print("Masukkan tanggal kadaluarsa (dd mm yyyy (untuk penulisan tanggal dan bulan 1 digit tidak perlu menggunakan 0 didepannya)): ")
-		fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
 		for !isTrue {
+			fmt.Print("Masukkan tanggal kadaluarsa (dd m yyyy (untuk penulisan tanggal dan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
+			fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
 			if T[i].bulan >= 1 && T[i].bulan <= 12 {
 					isTrue = true
 				if T[i].bulan == 1 || T[i].bulan == 3 || T[i].bulan == 5 || T[i].bulan == 7 || T[i].bulan == 9 || T[i].bulan == 11 {
-					if T[i].tanggal >= 01 && T[i].tanggal <= 31 {
+					if T[i].tanggal >= 1 && T[i].tanggal <= 31 {
 						isTrue = true
 					} else {
 						fmt.Println("Tanggal tidak valid")
-						fmt.Print("Masukkan tanggal kadaluarsa (dd m yyyy (untuk penulisan tanggal dan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
-						fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
+						isTrue = false
 					}
 				} else if T[i].bulan == 4 || T[i].bulan == 6 || T[i].bulan == 8 || T[i].bulan == 10 || T[i].bulan == 12 {
 					if T[i].tanggal >= 1 && T[i].tanggal <= 30 {
 						isTrue = true
 					} else {
 						fmt.Println("Tanggal tidak valid")
-						fmt.Print("Masukkan tanggal kadaluarsa (dd m yyyy (untuk penulisan tanggal dan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
-						fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
+						isTrue = false
 					}
 				} else if T[i].bulan == 2 {
 					if T[i].tanggal >= 1 && T[i].tanggal <= 28 {
 						isTrue = true
 					} else {
 						fmt.Println("Tanggal tidak valid")
-						fmt.Print("Masukkan tanggal kadaluarsa (dd m yyyy (untuk penulisan tanggal dan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
-						fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
+						isTrue = false
 					}
 				}
 			} else {
 				fmt.Println("Bulan tidak valid")
-				fmt.Print("Masukkan tanggal kadaluarsa (dd m yyyy (untuk penulisan tanggal dan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
-				fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
+				isTrue = false
+				
 			}
 		}
 		*nData++
