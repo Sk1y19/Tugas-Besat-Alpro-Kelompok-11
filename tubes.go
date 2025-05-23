@@ -7,7 +7,7 @@ type BahanMakanan struct {
 	stok, tanggal, bulan, tahun int
 }
 
-const NMAX int = 1000
+const NMAX int = 100
 
 type tabMakanan [NMAX]BahanMakanan
 
@@ -22,9 +22,14 @@ func main() {
 		fmt.Scan(&pilihmenu)
 		switch pilihmenu {
 		case 1:
-			fmt.Print("Masukkan banyaknya data bahan makanan yang akan dimasukkan: ")
-			fmt.Scan(&n)
-			inputBahan(&data, n, &nData)
+				fmt.Print("Masukkan banyaknya data bahan makanan yang akan dimasukkan: ")
+				fmt.Scan(&n)
+				if n > 0{
+					inputBahan(&data, n, &nData)	
+				}else{
+					fmt.Println("ERROR MASUKKAN TIDAK BOLEH SAMA DENGAN 0 ATAU NEGATIF!!")
+				}
+			
 		case 2:
 			ubahData(&data, &nData, id)
 		case 3:
@@ -52,7 +57,9 @@ func main() {
 }
 
 func menu() {
-	fmt.Println("------MENU------")
+	fmt.Println("================")
+	fmt.Println("      Menu      ")
+	fmt.Println("================")
 	fmt.Println("1. Input data makanan")
 	fmt.Println("2. Edit data makanan")
 	fmt.Println("3. Hapus data makanan")
@@ -62,16 +69,40 @@ func menu() {
 	fmt.Println("7. Daftar Bahan Makanan Urut Secara Menaik Berdasarkan Tanggal Kadaluarsa")
 	fmt.Println("8. Daftar Bahan Makanan Urut Secara Menurun Berdasarkan Jumlah Stok")
 	fmt.Println("9. Exit")
+	fmt.Println("=========================================================================")
 }
 
 func inputBahan(T *tabMakanan, n int, nData *int) {
 	var temp = *nData
 	var isTrue bool
+	var isidExist, isidBahan bool
+	var idBahan string
 	isTrue = false
+	if *nData+n > NMAX{
+		fmt.Println("PERINGATAN!!, data penuh!")
+		return
+	}
 	for i := temp; i < temp+n; i++ {
 		isTrue = false
-		fmt.Print("Masukkan Id bahan makanan: ")
-		fmt.Scan(&T[i].id)
+		isidBahan = false
+		
+		for !isidBahan{
+			fmt.Print("Masukkan Id bahan makanan: ")
+			fmt.Scan(&idBahan)
+			isidExist = false
+			for j := 0; j < *nData; j++ {
+				if T[j].id == idBahan {
+					isidExist = true
+				}
+			}
+			if isidExist {
+				fmt.Println("ID sudah ada, silakan masukkan ID yang berbeda.")
+			} else {
+				T[i].id = idBahan
+				isidBahan = true					
+			}
+		}
+		
 		fmt.Print("Masukkan nama bahan (jangan gunakan spasi gunakan '_'): ")
 		fmt.Scan(&T[i].nama)
 		fmt.Print("Masukkan stok: ")
@@ -79,6 +110,8 @@ func inputBahan(T *tabMakanan, n int, nData *int) {
 		for !isTrue {
 			fmt.Print("Masukkan tanggal kadaluarsa (dd m yyyy (untuk penulisan tanggal dan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
 			fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
+			if T[i].tahun >= 2025{
+				isTrue = true
 			if T[i].bulan >= 1 && T[i].bulan <= 12 {
 					isTrue = true
 				if T[i].bulan == 1 || T[i].bulan == 3 || T[i].bulan == 5 || T[i].bulan == 7 || T[i].bulan == 9 || T[i].bulan == 11 {
@@ -106,7 +139,10 @@ func inputBahan(T *tabMakanan, n int, nData *int) {
 			} else {
 				fmt.Println("Bulan tidak valid")
 				isTrue = false
-				
+			}
+			}else{
+				fmt.Println("Tahun tidak valid")
+				isTrue = false
 			}
 		}
 		*nData++
@@ -123,6 +159,9 @@ func cetakBahan(T tabMakanan, n int) {
 		fmt.Printf("Nama : %s\n", T[i].nama)
 		fmt.Printf("Stok : %d\n", T[i].stok)
 		fmt.Printf("Tanggal Kadaluarsa : %02d - %02d - %02d\n", T[i].tanggal, T[i].bulan, T[i].tahun)
+	}
+	if n == 0{
+		fmt.Println("Tidak Ada Data !")
 	}
 	fmt.Println("----------------")
 }
