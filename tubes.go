@@ -18,7 +18,7 @@ func main() {
 	nData = 0
 	for pilihmenu != 9 {
 		menu()
-		fmt.Print("Pilih opsi dari nomor 1 - 9q: ")
+		fmt.Print("Pilih opsi dari nomor 1 - 9: ")
 		fmt.Scan(&pilihmenu)
 		switch pilihmenu {
 		case 1:
@@ -69,6 +69,7 @@ func inputBahan(T *tabMakanan, n int, nData *int) {
 	var isTrue bool
 	isTrue = false
 	for i := temp; i < temp+n; i++ {
+		isTrue = false
 		fmt.Print("Masukkan Id bahan makanan: ")
 		fmt.Scan(&T[i].id)
 		fmt.Print("Masukkan nama bahan (jangan gunakan spasi gunakan '_'): ")
@@ -113,13 +114,17 @@ func inputBahan(T *tabMakanan, n int, nData *int) {
 }
 
 func cetakBahan(T tabMakanan, n int) {
+	fmt.Println("======================")
+	fmt.Println(" Daftar Bahan Makanan ")
+	fmt.Println("======================")
 	for i := 0; i < n; i++ {
-		fmt.Printf("---\n")
+		fmt.Printf("----------------\n")
 		fmt.Printf("id : %s\n", T[i].id)
 		fmt.Printf("Nama : %s\n", T[i].nama)
 		fmt.Printf("Stok : %d\n", T[i].stok)
 		fmt.Printf("Tanggal Kadaluarsa : %02d - %02d - %02d\n", T[i].tanggal, T[i].bulan, T[i].tahun)
 	}
+	fmt.Println("----------------")
 }
 
 func hapusData(tab *tabMakanan, id string, n *int) {
