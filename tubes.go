@@ -16,9 +16,9 @@ func main() {
 	var nData, n, pilihmenu int
 	var id string
 	nData = 0
-	for pilihmenu != 9 {
+	for pilihmenu != 10 {
 		menu()
-		fmt.Print("Pilih opsi dari nomor 1 - 9: ")
+		fmt.Print("Pilih opsi dari nomor 1 - 10: ")
 		fmt.Scan(&pilihmenu)
 		switch pilihmenu {
 		case 1:
@@ -38,17 +38,35 @@ func main() {
 			hapusData(&data, id, &nData)
 		case 5:
 			kadaluarsa(&data, &nData)
+		case 4:
+			cetakBahan(data, nData)
 		case 6:
 			fmt.Print("Masukkan ID bahan makanan: ")
 			fmt.Scan(&id)
 			cariBahan(data, nData, id)
-		case 4:
-			cetakBahan(data, nData)
 		case 7:
-			cetakBahan(InsertionSort(data, nData), nData)
+			var x string
+			var bin int
+			var sortNama tabMakanan
+			fmt.Print("Masukkan Nama Bahan: ")
+			fmt.Scan(&x)
+			sortNama = sortByNama(data, nData)
+
+			bin = binarySearchNama(sortNama, x, nData)
+			if bin != -1 {
+				fmt.Println("			Data Ditemukan		   ")
+				fmt.Println("----------------------------------")
+				fmt.Printf("Nama bahan makanan: %s\n", sortNama[bin].nama)
+				fmt.Printf("Stok: %d\n", sortNama[bin].stok)
+				fmt.Printf("Tanggal Kadaluarsa (dd - mm - yyyy): %02d - %02d - %04d\n", sortNama[bin].tanggal, sortNama[bin].bulan, sortNama[bin].tahun)
+			} else {
+				fmt.Println("DATA TIDAK DITEMUKAN")
+			}
 		case 8:
-			cetakBahan(selectionSort(data, nData), nData)
+			cetakBahan(InsertionSort(data, nData), nData)
 		case 9:
+			cetakBahan(selectionSort(data, nData), nData)
+		case 10:
 			fmt.Println("Log out berhasil")
 		default:
 			fmt.Println("Pilihan harus 1 - 9")
@@ -66,9 +84,10 @@ func menu() {
 	fmt.Println("4. Daftar Bahan Makanan")
 	fmt.Println("5. Cek Bahan Yang Mendekati Kadaluarsa atau Telah Kadaluarsa")
 	fmt.Println("6. Cari Bahan Makanan Berdasarkan ID")
-	fmt.Println("7. Daftar Bahan Makanan Urut Secara Menaik Berdasarkan Tanggal Kadaluarsa")
-	fmt.Println("8. Daftar Bahan Makanan Urut Secara Menurun Berdasarkan Jumlah Stok")
-	fmt.Println("9. Exit")
+	fmt.Println("7. Cari Bahan Makanan Berdasarkan Nama")
+	fmt.Println("8. Daftar Bahan Makanan Urut Secara Menaik Berdasarkan Tanggal Kadaluarsa")
+	fmt.Println("9. Daftar Bahan Makanan Urut Secara Menurun Berdasarkan Jumlah Stok")
+	fmt.Println("10. Exit")
 	fmt.Println("=========================================================================")
 }
 
@@ -227,8 +246,8 @@ func cariBahan(T tabMakanan, n int, id string) {
 	ketemu = false
 	for i := 0; i < n; i++ {
 		if T[i].id == id {
-			fmt.Println("Data Ditemukan")
-			fmt.Println("--------------")
+			fmt.Println("			Data Ditemukan		   ")
+			fmt.Println("----------------------------------")
 			fmt.Printf("Nama bahan makanan: %s\n", T[i].nama)
 			fmt.Printf("Stok: %d\n", T[i].stok)
 			fmt.Printf("Tanggal Kadaluarsa (dd - mm - yyyy): %02d - %02d - %04d\n", T[i].tanggal, T[i].bulan, T[i].tahun)
@@ -240,7 +259,7 @@ func cariBahan(T tabMakanan, n int, id string) {
 	}
 }
 
-func InsertionSort(T tabMakanan, n int) tabMakanan {
+func InsertionSort(T tabMakanan, n int) tabMakanan {//Menaik
 	var pass, i int
 	var temp BahanMakanan
 
@@ -258,7 +277,7 @@ func InsertionSort(T tabMakanan, n int) tabMakanan {
 	return T
 }
 
-func selectionSort(T tabMakanan, n int)tabMakanan{
+func selectionSort(T tabMakanan, n int)tabMakanan{//Menurun
 	var i, idx, pass int
 	var temp int
 	
@@ -276,6 +295,42 @@ func selectionSort(T tabMakanan, n int)tabMakanan{
 		T[pass - 1].stok = T[idx].stok
 		T[idx].stok = temp
 		pass++
+	}
+	return T
+}
+
+func binarySearchNama(T tabMakanan, x string, n int)int{
+	var left, mid, right int
+	var idx int
+	
+	left = 0
+	right = n-1
+	idx = -1
+	
+	for left <= right && idx == -1{
+		mid = (left+right)/2
+		if x < T[mid].nama{
+			right = mid - 1
+		}else if x > T[mid].nama{
+			left = mid + 1
+		}else{
+			idx = mid
+		}
+	}
+	return idx
+}
+
+func sortByNama(T tabMakanan, n int) tabMakanan {
+	var i, j int
+	var temp BahanMakanan
+	for i = 1; i < n; i++ {
+		temp = T[i]
+		j = i - 1
+		for j >= 0 && T[j].nama > temp.nama {
+			T[j+1] = T[j]
+			j--
+		}
+		T[j+1] = temp
 	}
 	return T
 }
