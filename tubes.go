@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 type BahanMakanan struct {
 	nama, id                    string
@@ -95,10 +98,14 @@ func menu() {
 	fmt.Println("=========================================================================")
 }
 
+func isLeapYear(year int) bool {
+	return (year%4 == 0 && year%100 != 0) || (year%400 == 0)
+}
+
 func inputBahan(T *tabMakanan, n int, nData *int) {
 	var temp = *nData
 	var isTrue bool
-	var isidExist, isidBahan bool
+	var isidExist, isidBahan, isStokvalid bool
 	var idBahan string
 	isTrue = false
 	if *nData+n > NMAX {
@@ -108,6 +115,7 @@ func inputBahan(T *tabMakanan, n int, nData *int) {
 	for i := temp; i < temp+n; i++ {
 		isTrue = false
 		isidBahan = false
+		isStokvalid = false
 
 		for !isidBahan {
 			fmt.Print("Masukkan Id bahan makanan: ")
@@ -125,11 +133,19 @@ func inputBahan(T *tabMakanan, n int, nData *int) {
 				isidBahan = true
 			}
 		}
-
 		fmt.Print("Masukkan nama bahan (jangan gunakan spasi gunakan '_'): ")
 		fmt.Scan(&T[i].nama)
-		fmt.Print("Masukkan stok: ")
-		fmt.Scan(&T[i].stok)
+
+		for !isStokvalid {
+			fmt.Print("Masukkan stok: ")
+			fmt.Scan(&T[i].stok)
+			if T[i].stok > 0 {
+				isStokvalid = true
+			} else {
+				fmt.Println("MASUKKAN STOK TIDAK VALID!!")
+			}
+		}
+
 		for !isTrue {
 			fmt.Print("Masukkan tanggal kadaluarsa (dd m yyyy (untuk penulisan tanggal dan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
 			fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
@@ -152,11 +168,22 @@ func inputBahan(T *tabMakanan, n int, nData *int) {
 							isTrue = false
 						}
 					} else if T[i].bulan == 2 {
-						if T[i].tanggal >= 1 && T[i].tanggal <= 28 {
-							isTrue = true
-						} else {
-							fmt.Println("Tanggal tidak valid")
-							isTrue = false
+						if T[i].tanggal >= 1 && T[i].tanggal <= 29 {
+							if isLeapYear(T[i].tahun) {
+								if T[i].tanggal >= 1 && T[i].tanggal <= 29 {
+									isTrue = true
+								} else {
+									fmt.Println("Tanggal tidak valid")
+									isTrue = false
+								}
+							} else {
+								if T[i].tanggal >= 1 && T[i].tanggal <= 28 {
+									isTrue = true
+								} else {
+									fmt.Println("Tanggal tidak valid")
+									isTrue = false
+								}
+							}
 						}
 					}
 				} else {
@@ -192,9 +219,13 @@ func cetakBahan(T tabMakanan, n int) {
 func hapusData(tab *tabMakanan, id string, n *int) {
 	var i, idx int
 	idx = -1
-	for i = 0; i <= *n && idx == -1; i++ {
+	for {
 		if tab[i].id == id {
 			idx = i
+		}
+
+		if i <= *n && idx == -1 {
+			break
 		}
 	}
 	if idx != -1 {
@@ -231,21 +262,24 @@ func ubahData(tab *tabMakanan, n *int, id string) {
 }
 
 func kadaluarsa(tab *tabMakanan, n *int) {
-	var i, tanggal, tahun, bulan int
+	var i int
 	var found bool
-	fmt.Print("Silakan masukkan tanggal saat ini: (dd mm yyyy (untuk penulisan tanggal dan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
-	fmt.Scan(&tanggal, &bulan, &tahun)
+	now := time.Now()
+	tanggal := now.Day()
+	bulan := int(now.Month())
+	tahun := now.Year()
 	found = false
-	for i = 0; i <= *n; i++ {
-		if ((tab[i].tanggal-tanggal <= 3 && tab[i].tanggal-tanggal >= 0) && tab[i].bulan == bulan && tab[i].tahun == tahun) || ((tab[i].bulan-bulan == 1) && tab[i].tahun == tahun && ((tab[i].tanggal <= 3 && tanggal >= 26) || (tab[i].tanggal >= 26 && tanggal <= 3))) {
-			fmt.Print("PERINGATAN: ", tab[i].nama, " AKAN SEGERA KADALUARSA PADA TANGGAL ", tab[i].tanggal, "/", tab[i].bulan, "/", tab[i].tahun, "\n")
+	for i = 0; i < *n; i++ {
+		if (tab[i].tanggal-now.Day() <= 3 && tab[i].tanggal-now.Day() >= 0 && tab[i].bulan == bulan && tab[i].tahun == tahun) ||
+			(tab[i].bulan-bulan == 1 && tab[i].tahun == tahun && ((tab[i].tanggal <= 3 && tanggal >= 26) || (tab[i].tanggal >= 26 && tanggal <= 3))) {
+			fmt.Printf("PERINGATAN: %s AKAN SEGERA KADALUARSA PADA TANGGAL %02d/%02d/%04d\n", tab[i].nama, tab[i].tanggal, tab[i].bulan, tab[i].tahun)
 			found = true
-		} else if tanggal-tab[i].tanggal > 0 && bulan-tab[i].bulan >= 0 && tahun-tab[i].tahun >= 0 && tab[i].tanggal != 0 && tanggal != 0 {
-			fmt.Print("PERINGATAN: ", tab[i].nama, " TELAH KADALUARSA PADA TANGGAL ", tab[i].tanggal, "/", tab[i].bulan, "/", tab[i].tahun, "\n")
+		} else if now.Day()-tab[i].tanggal > 0 && int(now.Month())-tab[i].bulan >= 0 && now.Year()-tab[i].tahun >= 0 && tab[i].tanggal != 0 && now.Day() != 0 {
+			fmt.Printf("PERINGATAN: %s TELAH KADALUARSA PADA TANGGAL %02d/%02d/%04d\n", tab[i].nama, tab[i].tanggal, tab[i].bulan, tab[i].tahun)
 			found = true
 		}
 	}
-	if found == false {
+	if !found {
 		fmt.Println("Tidak ada bahan makanan yang mendekati tanggal kadaluarsa atau telah kadaluarsa")
 	}
 }
