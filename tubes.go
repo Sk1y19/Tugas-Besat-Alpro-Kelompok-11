@@ -110,8 +110,7 @@ func inputBahan(T *tabMakanan, n int, nData *int) {
 	isTrue = false
 	if *nData+n > NMAX {
 		fmt.Println("PERINGATAN!!, data penuh!")
-		return
-	}
+	}else{
 	for i := temp; i < temp+n; i++ {
 		isTrue = false
 		isidBahan = false
@@ -188,6 +187,7 @@ func inputBahan(T *tabMakanan, n int, nData *int) {
 			}
 		}
 		*nData++
+		}
 	}
 }
 
