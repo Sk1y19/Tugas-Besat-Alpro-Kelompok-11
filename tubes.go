@@ -411,7 +411,7 @@ func stokTerbanyak(T tabMakanan, n int) {
 	var i, idx int
 	idx = 0
 	for i = 1; i <= n; i++ {
-		if T[i].stok > T[idx].stok && T[i].nama != "" {
+		if T[i].stok-T[i].stokTergunakan > T[idx].stok-T[idx].stokTergunakan && T[i].nama != "" {
 			idx = i
 		}
 	}
@@ -419,7 +419,9 @@ func stokTerbanyak(T tabMakanan, n int) {
 	fmt.Println("Stok Terbanyak")
 	fmt.Println("--------------")
 	fmt.Printf("Nama bahan makanan: %s\n", T[idx].nama)
-	fmt.Printf("Stok: %d\n", T[idx].stok)
+	fmt.Printf("Stok Yang Tersedia: %d\n", T[idx].stok-T[idx].stokTergunakan)
+	fmt.Printf("Stok Awal: %d\n", T[idx].stok)
+	fmt.Printf("Stok Tergunakan: %d\n", T[idx].stokTergunakan)
 	fmt.Printf("Tanggal Kadaluarsa (dd - mm - yyyy): %02d - %02d - %04d\n", T[idx].tanggal, T[idx].bulan, T[idx].tahun)
 }
 
@@ -427,7 +429,7 @@ func stokTersedikit(T tabMakanan, n int) {
 	var i, idx int
 	idx = 0
 	for i = 1; i <= n; i++ {
-		if T[i].stok < T[idx].stok && T[i].nama != "" {
+		if T[i].stok-T[i].stokTergunakan < T[idx].stok-T[idx].stokTergunakan && T[i].nama != "" {
 			idx = i
 		}
 	}
@@ -435,6 +437,8 @@ func stokTersedikit(T tabMakanan, n int) {
 	fmt.Println("Stok Tersedikit")
 	fmt.Println("---------------")
 	fmt.Printf("Nama bahan makanan: %s\n", T[idx].nama)
-	fmt.Printf("Stok: %d\n", T[idx].stok)
+	fmt.Printf("Stok Yang Tersedia: %d\n", T[idx].stok-T[idx].stokTergunakan)
+	fmt.Printf("Stok Awal: %d\n", T[idx].stok)
+	fmt.Printf("Stok Tergunakan: %d\n", T[idx].stokTergunakan)
 	fmt.Printf("Tanggal Kadaluarsa (dd - mm - yyyy): %02d - %02d - %04d\n", T[idx].tanggal, T[idx].bulan, T[idx].tahun)
 }
