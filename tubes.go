@@ -110,92 +110,84 @@ func inputBahan(T *tabMakanan, n int, nData *int) {
 	isTrue = false
 	if *nData+n > NMAX {
 		fmt.Println("PERINGATAN!!, data penuh!")
-	} else {
-		for i := temp; i < temp+n; i++ {
-			isTrue = false
-			isidBahan = false
-			isStokvalid = false
+		return
+	}
+	for i := temp; i < temp+n; i++ {
+		isTrue = false
+		isidBahan = false
+		isStokvalid = false
 
-			for !isidBahan {
-				fmt.Print("Masukkan Id bahan makanan: ")
-				fmt.Scan(&idBahan)
-				isidExist = false
-				for j := 0; j < *nData; j++ {
-					if T[j].id == idBahan {
-						isidExist = true
-					}
-				}
-				if isidExist {
-					fmt.Println("ID sudah ada, silakan masukkan ID yang berbeda.")
-				} else {
-					T[i].id = idBahan
-					isidBahan = true
+		for !isidBahan {
+			fmt.Print("Masukkan Id bahan makanan: ")
+			fmt.Scan(&idBahan)
+			isidExist = false
+			for j := 0; j < *nData; j++ {
+				if T[j].id == idBahan {
+					isidExist = true
 				}
 			}
-			fmt.Print("Masukkan nama bahan (jangan gunakan spasi gunakan '_'): ")
-			fmt.Scan(&T[i].nama)
-
-			for !isStokvalid {
-				fmt.Print("Masukkan stok awal: ")
-				fmt.Scan(&T[i].stok)
-				if T[i].stok > 0 {
-					isStokvalid = true
-				} else {
-					fmt.Println("MASUKKAN STOK TIDAK VALID!!")
-				}
+			if isidExist {
+				fmt.Println("ID sudah ada, silakan masukkan ID yang berbeda.")
+			} else {
+				T[i].id = idBahan
+				isidBahan = true
 			}
+		}
+		fmt.Print("Masukkan nama bahan (jangan gunakan spasi gunakan '_'): ")
+		fmt.Scan(&T[i].nama)
 
-			for !isTrue {
-				fmt.Print("Masukkan tanggal kadaluarsa (dd m yyyy (untuk penulisan tanggal dan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
-				fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
-				if T[i].tahun >= 2025 {
-					isTrue = true
-					if T[i].bulan >= 1 && T[i].bulan <= 12 {
-						isTrue = true
-						if T[i].bulan == 1 || T[i].bulan == 3 || T[i].bulan == 5 || T[i].bulan == 7 || T[i].bulan == 9 || T[i].bulan == 11 {
-							if T[i].tanggal >= 1 && T[i].tanggal <= 31 {
-								isTrue = true
-							} else {
-								fmt.Println("Tanggal tidak valid")
-								isTrue = false
-							}
-						} else if T[i].bulan == 4 || T[i].bulan == 6 || T[i].bulan == 8 || T[i].bulan == 10 || T[i].bulan == 12 {
-							if T[i].tanggal >= 1 && T[i].tanggal <= 30 {
-								isTrue = true
-							} else {
-								fmt.Println("Tanggal tidak valid")
-								isTrue = false
-							}
-						} else if T[i].bulan == 2 {
-							if T[i].tanggal >= 1 && T[i].tanggal <= 29 {
-								if isLeapYear(T[i].tahun) {
-									if T[i].tanggal >= 1 && T[i].tanggal <= 29 {
-										isTrue = true
-									} else {
-										fmt.Println("Tanggal tidak valid")
-										isTrue = false
-									}
+		for !isStokvalid {
+			fmt.Print("Masukkan stok awal: ")
+			fmt.Scan(&T[i].stok)
+			if T[i].stok > 0 {
+				isStokvalid = true
+			} else {
+				fmt.Println("MASUKKAN STOK TIDAK VALID!!")
+			}
+		}
+
+		for !isTrue {
+			fmt.Print("Masukkan tanggal kadaluarsa (dd m yyyy (untuk penulisan tanggal dan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
+			fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
+			if T[i].tahun >= 2025 {
+				if T[i].bulan >= 1 && T[i].bulan <= 12 {
+					if T[i].bulan == 1 || T[i].bulan == 3 || T[i].bulan == 5 || T[i].bulan == 7 || T[i].bulan == 9 || T[i].bulan == 11 {
+						if T[i].tanggal >= 1 && T[i].tanggal <= 31 {
+							isTrue = true
+						} else {
+							fmt.Println("Tanggal tidak valid")
+						}
+					} else if T[i].bulan == 4 || T[i].bulan == 6 || T[i].bulan == 8 || T[i].bulan == 10 || T[i].bulan == 12 {
+						if T[i].tanggal >= 1 && T[i].tanggal <= 30 {
+							isTrue = true
+						} else {
+							fmt.Println("Tanggal tidak valid")
+						}
+					} else if T[i].bulan == 2 {
+						if T[i].tanggal >= 1 && T[i].tanggal <= 29 {
+							if isLeapYear(T[i].tahun) {
+								if T[i].tanggal >= 1 && T[i].tanggal <= 29 {
+									isTrue = true
 								} else {
-									if T[i].tanggal >= 1 && T[i].tanggal <= 28 {
-										isTrue = true
-									} else {
-										fmt.Println("Tanggal tidak valid")
-										isTrue = false
-									}
+									fmt.Println("Tanggal tidak valid")
+								}
+							} else {
+								if T[i].tanggal >= 1 && T[i].tanggal <= 28 {
+									isTrue = true
+								} else {
+									fmt.Println("Tanggal tidak valid")
 								}
 							}
 						}
-					} else {
-						fmt.Println("Bulan tidak valid")
-						isTrue = false
 					}
 				} else {
-					fmt.Println("Tahun tidak valid")
-					isTrue = false
+					fmt.Println("Bulan tidak valid")
 				}
+			} else {
+				fmt.Println("Tahun tidak valid")
 			}
-		*nData++
 		}
+		*nData++
 	}
 }
 
@@ -239,6 +231,8 @@ func hapusData(tab *tabMakanan, id string, n *int) {
 
 func ubahData(tab *tabMakanan, n *int, id string) {
 	var i, idx, choice int
+	var isTrue bool
+	isTrue = false
 	choice = -1
 	idx = -1
 	fmt.Print("Silakan masukkan id bahan yang ingin diubah datanya: ")
@@ -268,7 +262,6 @@ func ubahData(tab *tabMakanan, n *int, id string) {
 		fmt.Println("3. Ubah Stok Tergunakan")
 		fmt.Println("4. Ubah Tanggal Kadaluarsa")
 		for choice < 1 || choice > 4 {
-			fmt.Print("Pilih opsi 1/2/3/4: ")
 			fmt.Scan(&choice)
 			switch choice {
 			case 1:
@@ -280,9 +273,52 @@ func ubahData(tab *tabMakanan, n *int, id string) {
 			case 3:
 				fmt.Print("Masukkan stok tergunakan yang baru: ")
 				fmt.Scan(&tab[idx].stokTergunakan)
+				for tab[idx].stokTergunakan > tab[idx].stok || tab[idx].stokTergunakan < 0 {
+					fmt.Println("STOK TERGUNAKAN TIDAK VALID, SILAKAN INPUT ULANG: ")
+					fmt.Scan(&tab[idx].stokTergunakan)
+				}
 			case 4:
-				fmt.Print("Masukkan tanggal kadaluarsa yang baru: (dd mm yy(untuk penulisan tanggal dan bulan 1 digit tidak perlu menggunkan 0 didepannya))")
-				fmt.Scan(&tab[idx].tanggal, &tab[idx].bulan, &tab[idx].tahun)
+				for !isTrue {
+					fmt.Print("Masukkan tanggal kadaluarsa (dd m yyyy (untuk penulisan tanggal dan bulan 1 digit tidak perlu menggunkan 0 didepannya)): ")
+					fmt.Scan(&tab[i].tanggal, &tab[i].bulan, &tab[i].tahun)
+					if tab[i].tahun >= 2025 {
+						if tab[i].bulan >= 1 && tab[i].bulan <= 12 {
+							if tab[i].bulan == 1 || tab[i].bulan == 3 || tab[i].bulan == 5 || tab[i].bulan == 7 || tab[i].bulan == 9 || tab[i].bulan == 11 {
+								if tab[i].tanggal >= 1 && tab[i].tanggal <= 31 {
+									isTrue = true
+								} else {
+									fmt.Println("Tanggal tidak valid")
+								}
+							} else if tab[i].bulan == 4 || tab[i].bulan == 6 || tab[i].bulan == 8 || tab[i].bulan == 10 || tab[i].bulan == 12 {
+								if tab[i].tanggal >= 1 && tab[i].tanggal <= 30 {
+									isTrue = true
+								} else {
+									fmt.Println("Tanggal tidak valid")
+								}
+							} else if tab[i].bulan == 2 {
+								if tab[i].tanggal >= 1 && tab[i].tanggal <= 29 {
+									if isLeapYear(tab[i].tahun) {
+										if tab[i].tanggal >= 1 && tab[i].tanggal <= 29 {
+											isTrue = true
+										} else {
+											fmt.Println("Tanggal tidak valid")
+										}
+									} else {
+										if tab[i].tanggal >= 1 && tab[i].tanggal <= 28 {
+											isTrue = true
+										} else {
+											fmt.Println("Tanggal tidak valid")
+										}
+									}
+								}
+							}
+						} else {
+							fmt.Println("Bulan tidak valid")
+						}
+					} else {
+						fmt.Println("Tahun tidak valid")
+					}
+				}
 			default:
 				fmt.Println("Pilihan harus 1 - 4")
 			}
@@ -411,7 +447,7 @@ func stokTerbanyak(T tabMakanan, n int) {
 	var i, idx int
 	idx = 0
 	for i = 1; i <= n; i++ {
-		if T[i].stok > T[idx].stok && T[i].nama != "" {
+		if T[i].stok-T[i].stokTergunakan > T[idx].stok-T[idx].stokTergunakan && T[i].nama != "" {
 			idx = i
 		}
 	}
@@ -419,7 +455,9 @@ func stokTerbanyak(T tabMakanan, n int) {
 	fmt.Println("Stok Terbanyak")
 	fmt.Println("--------------")
 	fmt.Printf("Nama bahan makanan: %s\n", T[idx].nama)
-	fmt.Printf("Stok: %d\n", T[idx].stok)
+	fmt.Printf("Stok Yang Tersedia: %d\n", T[idx].stok-T[idx].stokTergunakan)
+	fmt.Printf("Stok Awal: %d\n", T[idx].stok)
+	fmt.Printf("Stok Tergunakan: %d\n", T[idx].stokTergunakan)
 	fmt.Printf("Tanggal Kadaluarsa (dd - mm - yyyy): %02d - %02d - %04d\n", T[idx].tanggal, T[idx].bulan, T[idx].tahun)
 }
 
@@ -427,7 +465,7 @@ func stokTersedikit(T tabMakanan, n int) {
 	var i, idx int
 	idx = 0
 	for i = 1; i <= n; i++ {
-		if T[i].stok < T[idx].stok && T[i].nama != "" {
+		if T[i].stok-T[i].stokTergunakan < T[idx].stok-T[idx].stokTergunakan && T[i].nama != "" {
 			idx = i
 		}
 	}
@@ -435,6 +473,8 @@ func stokTersedikit(T tabMakanan, n int) {
 	fmt.Println("Stok Tersedikit")
 	fmt.Println("---------------")
 	fmt.Printf("Nama bahan makanan: %s\n", T[idx].nama)
-	fmt.Printf("Stok: %d\n", T[idx].stok)
+	fmt.Printf("Stok Yang Tersedia: %d\n", T[idx].stok-T[idx].stokTergunakan)
+	fmt.Printf("Stok Awal: %d\n", T[idx].stok)
+	fmt.Printf("Stok Tergunakan: %d\n", T[idx].stokTergunakan)
 	fmt.Printf("Tanggal Kadaluarsa (dd - mm - yyyy): %02d - %02d - %04d\n", T[idx].tanggal, T[idx].bulan, T[idx].tahun)
 }
