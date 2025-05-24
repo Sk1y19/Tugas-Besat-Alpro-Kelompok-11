@@ -60,7 +60,7 @@ func main() {
 				fmt.Println("			Data Ditemukan		   ")
 				fmt.Println("----------------------------------")
 				fmt.Printf("Nama bahan makanan: %s\n", sortNama[bin].nama)
-				fmt.Printf("Stok: %d\n", sortNama[bin].stok)
+				fmt.Printf("Stok: %d\n", sortNama[bin].stok - sortNama[bin].stokTergunakan)
 				fmt.Printf("Tanggal Kadaluarsa (dd - mm - yyyy): %02d - %02d - %04d\n", sortNama[bin].tanggal, sortNama[bin].bulan, sortNama[bin].tahun)
 			} else {
 				fmt.Println("DATA TIDAK DITEMUKAN")
@@ -263,6 +263,7 @@ func ubahData(tab *tabMakanan, n *int) {
 		fmt.Println("3. Ubah Stok Tergunakan")
 		fmt.Println("4. Ubah Tanggal Kadaluarsa")
 		for choice < 1 || choice > 4 {
+                       fmt.Print("Pilih opsi 1/2/3/4: ")
 			fmt.Scan(&choice)
 			switch choice {
 			case 1:
@@ -362,7 +363,7 @@ func cariBahan(T tabMakanan, n int, id string) {
 			fmt.Println("			Data Ditemukan		   ")
 			fmt.Println("----------------------------------")
 			fmt.Printf("Nama bahan makanan: %s\n", T[i].nama)
-			fmt.Printf("Stok: %d\n", T[i].stok)
+			fmt.Printf("Stok: %d\n", T[i].stok-T[i].stokTergunakan)
 			fmt.Printf("Tanggal Kadaluarsa (dd - mm - yyyy): %02d - %02d - %04d\n", T[i].tanggal, T[i].bulan, T[i].tahun)
 			ketemu = true
 		}
