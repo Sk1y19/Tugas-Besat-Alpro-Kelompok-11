@@ -34,7 +34,7 @@ func main() {
 			}
 
 		case 2:
-			ubahData(&data, &nData, id)
+			ubahData(&data, &nData)
 		case 3:
 			fmt.Print("Masukkan ID bahan makanan: ")
 			fmt.Scan(&id)
@@ -213,13 +213,13 @@ func cetakBahan(T tabMakanan, n int) {
 func hapusData(tab *tabMakanan, id string, n *int) {
 	var i, idx int
 	idx = -1
-	for i = 0; i <= *n; i++ {
+	for i = 0; i < *n; i++ {
 		if tab[i].id == id {
 			idx = i
 		}
 	}
 	if idx != -1 {
-		for i = idx; i < *n; i++ {
+		for i = idx; i < *n-1; i++ {
 			tab[i] = tab[i+1]
 		}
 		*n -= 1
@@ -229,15 +229,16 @@ func hapusData(tab *tabMakanan, id string, n *int) {
 	}
 }
 
-func ubahData(tab *tabMakanan, n *int, id string) {
+func ubahData(tab *tabMakanan, n *int) {
 	var i, idx, choice int
+	var id string
 	var isTrue bool
 	isTrue = false
 	choice = -1
 	idx = -1
 	fmt.Print("Silakan masukkan id bahan yang ingin diubah datanya: ")
 	fmt.Scan(&id)
-	for i = 0; i <= *n && idx == -1; i++ {
+	for i = 0; i < *n && idx == -1; i++ {
 		if tab[i].id == id {
 			idx = i
 		}
@@ -262,7 +263,6 @@ func ubahData(tab *tabMakanan, n *int, id string) {
 		fmt.Println("3. Ubah Stok Tergunakan")
 		fmt.Println("4. Ubah Tanggal Kadaluarsa")
 		for choice < 1 || choice > 4 {
-			fmt.Print("Pilih opse 1/2/3/4: ")
 			fmt.Scan(&choice)
 			switch choice {
 			case 1:
@@ -271,6 +271,10 @@ func ubahData(tab *tabMakanan, n *int, id string) {
 			case 2:
 				fmt.Print("Masukkan stok awal yang baru: ")
 				fmt.Scan(&tab[idx].stok)
+				for tab[idx].stok < tab[idx].stokTergunakan || tab[idx].stok < 0 {
+					fmt.Println("STOK TERGUNAKAN TIDAK VALID, SILAKAN INPUT ULANG: ")
+					fmt.Scan(&tab[idx].stok)
+				}
 			case 3:
 				fmt.Print("Masukkan stok tergunakan yang baru: ")
 				fmt.Scan(&tab[idx].stokTergunakan)
@@ -447,7 +451,7 @@ func sortByNama(T tabMakanan, n int) tabMakanan {
 func stokTerbanyak(T tabMakanan, n int) {
 	var i, idx int
 	idx = 0
-	for i = 1; i <= n; i++ {
+	for i = 1; i < n; i++ {
 		if T[i].stok-T[i].stokTergunakan > T[idx].stok-T[idx].stokTergunakan && T[i].nama != "" {
 			idx = i
 		}
@@ -465,7 +469,7 @@ func stokTerbanyak(T tabMakanan, n int) {
 func stokTersedikit(T tabMakanan, n int) {
 	var i, idx int
 	idx = 0
-	for i = 1; i <= n; i++ {
+	for i = 1; i < n; i++ {
 		if T[i].stok-T[i].stokTergunakan < T[idx].stok-T[idx].stokTergunakan && T[i].nama != "" {
 			idx = i
 		}
@@ -478,4 +482,4 @@ func stokTersedikit(T tabMakanan, n int) {
 	fmt.Printf("Stok Awal: %d\n", T[idx].stok)
 	fmt.Printf("Stok Tergunakan: %d\n", T[idx].stokTergunakan)
 	fmt.Printf("Tanggal Kadaluarsa (dd - mm - yyyy): %02d - %02d - %04d\n", T[idx].tanggal, T[idx].bulan, T[idx].tahun)
-}	
+}
