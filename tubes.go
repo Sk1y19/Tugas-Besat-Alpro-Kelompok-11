@@ -6,8 +6,8 @@ import (
 )
 
 type BahanMakanan struct {
-	nama, id                    string
-	stok, tanggal, bulan, tahun int
+	nama, id                                    string
+	stok, stokTergunakan, tanggal, bulan, tahun int
 }
 
 const NMAX int = 100
@@ -19,7 +19,7 @@ func main() {
 	var nData, n, pilihmenu int
 	var id string
 	nData = 0
-	for pilihmenu != 10 {
+	for pilihmenu != 11 {
 		menu()
 		fmt.Print("Pilih opsi dari nomor 1 - 11: ")
 		fmt.Scan(&pilihmenu)
@@ -137,7 +137,7 @@ func inputBahan(T *tabMakanan, n int, nData *int) {
 		fmt.Scan(&T[i].nama)
 
 		for !isStokvalid {
-			fmt.Print("Masukkan stok: ")
+			fmt.Print("Masukkan stok awal: ")
 			fmt.Scan(&T[i].stok)
 			if T[i].stok > 0 {
 				isStokvalid = true
@@ -207,7 +207,9 @@ func cetakBahan(T tabMakanan, n int) {
 		fmt.Printf("----------------\n")
 		fmt.Printf("id : %s\n", T[i].id)
 		fmt.Printf("Nama : %s\n", T[i].nama)
-		fmt.Printf("Stok : %d\n", T[i].stok)
+		fmt.Printf("Stok Yang Tersedia: %d\n", T[i].stok-T[i].stokTergunakan)
+		fmt.Printf("Stok Awal: %d\n", T[i].stok)
+		fmt.Printf("Stok Tergunakan: %d\n", T[i].stokTergunakan)
 		fmt.Printf("Tanggal Kadaluarsa : %02d - %02d - %02d\n", T[i].tanggal, T[i].bulan, T[i].tahun)
 	}
 	if n == 0 {
@@ -236,7 +238,8 @@ func hapusData(tab *tabMakanan, id string, n *int) {
 }
 
 func ubahData(tab *tabMakanan, n *int, id string) {
-	var i, idx int
+	var i, idx, choice int
+	choice = -1
 	idx = -1
 	fmt.Print("Silakan masukkan id bahan yang ingin diubah datanya: ")
 	fmt.Scan(&id)
@@ -248,12 +251,42 @@ func ubahData(tab *tabMakanan, n *int, id string) {
 	if idx == -1 {
 		fmt.Print("Id Data tidak ditemukan.\n")
 	} else {
-		fmt.Print("Masukkan nama yang baru (jika tidak ingin diubah gunakan nama yang sudah ada): ")
-		fmt.Scan(&tab[idx].nama)
-		fmt.Print("Ubah stok yang baru (kalau sama pakai jumlah stok lama): ")
-		fmt.Scan(&tab[idx].stok)
-		fmt.Print("Silakan masukkan tanggal kadaluarsa yang baru (dd mm yy): ")
-		fmt.Scan(&tab[idx].tanggal, &tab[idx].bulan, &tab[idx].tahun)
+		fmt.Println("================")
+		fmt.Println("      Data      ")
+		fmt.Println("================")
+		fmt.Printf("id : %s\n", tab[idx].id)
+		fmt.Printf("Nama : %s\n", tab[idx].nama)
+		fmt.Printf("Stok Yang Tersedia: %d\n", tab[idx].stok-tab[idx].stokTergunakan)
+		fmt.Printf("Stok Awal: %d\n", tab[idx].stok)
+		fmt.Printf("Stok Tergunakan: %d\n", tab[idx].stokTergunakan)
+		fmt.Printf("Tanggal Kadaluarsa : %02d - %02d - %02d\n", tab[idx].tanggal, tab[idx].bulan, tab[idx].tahun)
+		fmt.Println("================")
+		fmt.Println(" Menu Edit Data ")
+		fmt.Println("================")
+		fmt.Println("1. Ubah Nama Bahan Makanan")
+		fmt.Println("2. Ubah Stok Awal")
+		fmt.Println("3. Ubah Stok Tergunakan")
+		fmt.Println("4. Ubah Tanggal Kadaluarsa")
+		for choice < 1 || choice > 4 {
+			fmt.Print("Pilih opsi 1/2/3/4: ")
+			fmt.Scan(&choice)
+			switch choice {
+			case 1:
+				fmt.Print("Masukkan nama yang baru: ")
+				fmt.Scan(&tab[idx].nama)
+			case 2:
+				fmt.Print("Masukkan stok awal yang baru: ")
+				fmt.Scan(&tab[idx].stok)
+			case 3:
+				fmt.Print("Masukkan stok tergunakan yang baru: ")
+				fmt.Scan(&tab[idx].stokTergunakan)
+			case 4:
+				fmt.Print("Masukkan tanggal kadaluarsa yang baru: (dd mm yy(untuk penulisan tanggal dan bulan 1 digit tidak perlu menggunkan 0 didepannya))")
+				fmt.Scan(&tab[idx].tanggal, &tab[idx].bulan, &tab[idx].tahun)
+			default:
+				fmt.Println("Pilihan harus 1 - 4")
+			}
+		}
 	}
 }
 
