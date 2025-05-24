@@ -219,13 +219,9 @@ func cetakBahan(T tabMakanan, n int) {
 func hapusData(tab *tabMakanan, id string, n *int) {
 	var i, idx int
 	idx = -1
-	for {
+	for i = 0; i <= *n; i++ {
 		if tab[i].id == id {
 			idx = i
-		}
-
-		if i <= *n && idx == -1 {
-			break
 		}
 	}
 	if idx != -1 {
