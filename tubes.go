@@ -262,6 +262,7 @@ func ubahData(tab *tabMakanan, n *int, id string) {
 		fmt.Println("3. Ubah Stok Tergunakan")
 		fmt.Println("4. Ubah Tanggal Kadaluarsa")
 		for choice < 1 || choice > 4 {
+			fmt.Print("Pilih opse 1/2/3/4: ")
 			fmt.Scan(&choice)
 			switch choice {
 			case 1:
@@ -477,4 +478,4 @@ func stokTersedikit(T tabMakanan, n int) {
 	fmt.Printf("Stok Awal: %d\n", T[idx].stok)
 	fmt.Printf("Stok Tergunakan: %d\n", T[idx].stokTergunakan)
 	fmt.Printf("Tanggal Kadaluarsa (dd - mm - yyyy): %02d - %02d - %04d\n", T[idx].tanggal, T[idx].bulan, T[idx].tahun)
-}
+}	
