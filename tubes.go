@@ -61,6 +61,7 @@ func main() {
 				fmt.Println("----------------------------------")
 				fmt.Printf("Nama bahan makanan: %s\n", sortNama[bin].nama)
 				fmt.Printf("Stok: %d\n", sortNama[bin].stok - sortNama[bin].stokTergunakan)
+				fmt.Printf("Stok Tergunakan: %d\n", sortNama[bin].stokTergunakan)
 				fmt.Printf("Tanggal Kadaluarsa (dd - mm - yyyy): %02d - %02d - %04d\n", sortNama[bin].tanggal, sortNama[bin].bulan, sortNama[bin].tahun)
 			} else {
 				fmt.Println("DATA TIDAK DITEMUKAN")
@@ -363,7 +364,9 @@ func cariBahan(T tabMakanan, n int, id string) {
 			fmt.Println("			Data Ditemukan		   ")
 			fmt.Println("----------------------------------")
 			fmt.Printf("Nama bahan makanan: %s\n", T[i].nama)
-			fmt.Printf("Stok: %d\n", T[i].stok-T[i].stokTergunakan)
+			fmt.Printf("Stok Yang Tersedia: %d\n", T[i].stok-T[i].stokTergunakan)
+			fmt.Printf("Stok Awal: %d\n", T[i].stok)
+			fmt.Printf("Stok Tergunakan: %d\n", T[i].stokTergunakan)
 			fmt.Printf("Tanggal Kadaluarsa (dd - mm - yyyy): %02d - %02d - %04d\n", T[i].tanggal, T[i].bulan, T[i].tahun)
 			ketemu = true
 		}
@@ -372,7 +375,6 @@ func cariBahan(T tabMakanan, n int, id string) {
 		fmt.Println("Data tidak ditemukan")
 	}
 }
-
 func InsertionSort(T tabMakanan, n int) tabMakanan { //Menaik
 	var pass, i int
 	var temp BahanMakanan
