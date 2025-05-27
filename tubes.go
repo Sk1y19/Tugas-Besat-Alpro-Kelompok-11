@@ -152,13 +152,13 @@ func inputBahan(T *tabMakanan, n int, nData *int) {
 				fmt.Scan(&T[i].tanggal, &T[i].bulan, &T[i].tahun)
 				if T[i].tahun >= 2025 {
 					if T[i].bulan >= 1 && T[i].bulan <= 12 {
-						if T[i].bulan == 1 || T[i].bulan == 3 || T[i].bulan == 5 || T[i].bulan == 7 || T[i].bulan == 9 || T[i].bulan == 11 {
+						if T[i].bulan == 1 || T[i].bulan == 3 || T[i].bulan == 5 || T[i].bulan == 7 || T[i].bulan == 8 || T[i].bulan == 10 || T[i].bulan == 12 {
 							if T[i].tanggal >= 1 && T[i].tanggal <= 31 {
 								isTrue = true
 							} else {
 								fmt.Println("Tanggal tidak valid")
 							}
-						} else if T[i].bulan == 4 || T[i].bulan == 6 || T[i].bulan == 8 || T[i].bulan == 10 || T[i].bulan == 12 {
+						} else if T[i].bulan == 4 || T[i].bulan == 6 || T[i].bulan == 9 || T[i].bulan == 11 {
 							if T[i].tanggal >= 1 && T[i].tanggal <= 30 {
 								isTrue = true
 							} else {
