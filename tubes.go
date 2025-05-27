@@ -10,7 +10,7 @@ type BahanMakanan struct {
 	stok, stokTergunakan, tanggal, bulan, tahun int
 }
 
-const NMAX int = 100
+const NMAX int = 10
 
 type tabMakanan [NMAX]BahanMakanan
 
@@ -27,11 +27,12 @@ func main() {
 		case 1:
 			fmt.Print("Masukkan banyaknya data bahan makanan yang akan dimasukkan: ")
 			fmt.Scan(&n)
-			if n > 0 {
-				inputBahan(&data, n, &nData)
-			} else {
+			for n <= 0{
 				fmt.Println("MASUKAN TIDAK BOLEH SAMA DENGAN 0 ATAU NEGATIF!!")
+				fmt.Print("Masukkan banyaknya data bahan makanan yang akan dimasukkan: ")
+				fmt.Scan(&n)
 			}
+			inputBahan(&data, n, &nData)
 
 		case 2:
 			ubahData(&data, &nData)
@@ -169,16 +170,18 @@ func inputBahan(T *tabMakanan, n int, nData *int) {
 								if isLeapYear(T[i].tahun) {
 									if T[i].tanggal >= 1 && T[i].tanggal <= 29 {
 										isTrue = true
-									} else {
+									}else{
 										fmt.Println("Tanggal tidak valid")
 									}
 								} else {
 									if T[i].tanggal >= 1 && T[i].tanggal <= 28 {
 										isTrue = true
-									} else {
+									}else{
 										fmt.Println("Tanggal tidak valid")
 									}
 								}
+							}else{
+								fmt.Println("Tanggal tidak valid")
 							}
 						}
 					} else {
@@ -275,14 +278,14 @@ func ubahData(tab *tabMakanan, n *int) {
 				fmt.Print("Masukkan stok awal yang baru: ")
 				fmt.Scan(&tab[idx].stok)
 				for tab[idx].stok < tab[idx].stokTergunakan || tab[idx].stok < 0 {
-					fmt.Println("STOK TIDAK VALID, SILAKAN INPUT ULANG: ")
+					fmt.Print("STOK TIDAK VALID, SILAKAN INPUT ULANG: ")
 					fmt.Scan(&tab[idx].stok)
 				}
 			case 3:
 				fmt.Print("Masukkan stok tergunakan yang baru: ")
 				fmt.Scan(&tab[idx].stokTergunakan)
 				for tab[idx].stokTergunakan > tab[idx].stok || tab[idx].stokTergunakan < 0 {
-					fmt.Println("STOK TERGUNAKAN TIDAK VALID, SILAKAN INPUT ULANG: ")
+					fmt.Print("STOK TERGUNAKAN TIDAK VALID, SILAKAN INPUT ULANG: ")
 					fmt.Scan(&tab[idx].stokTergunakan)
 				}
 			case 4:
@@ -318,6 +321,8 @@ func ubahData(tab *tabMakanan, n *int) {
 											fmt.Println("Tanggal tidak valid")
 										}
 									}
+								}else{
+									fmt.Println("Tanggal tidak valid")
 								}
 							}
 						} else {
@@ -347,7 +352,7 @@ func kadaluarsa(tab *tabMakanan, n *int) {
 			(tab[i].bulan-bulan == 1 && tab[i].tahun == tahun && ((tab[i].tanggal <= 3 && tanggal >= 26) || (tab[i].tanggal >= 26 && tanggal <= 3))) {
 			fmt.Printf("PERINGATAN: %s AKAN SEGERA KADALUARSA PADA TANGGAL %02d/%02d/%04d\n", tab[i].nama, tab[i].tanggal, tab[i].bulan, tab[i].tahun)
 			found = true
-		} else if now.Day()-tab[i].tanggal > 0 && int(now.Month())-tab[i].bulan >= 0 && now.Year()-tab[i].tahun >= 0 && tab[i].tanggal != 0 && now.Day() != 0 {
+		} else if (now.Day()-tab[i].tanggal > 0 && int(now.Month())-tab[i].bulan == 0 && now.Year()-tab[i].tahun >= 0 && tab[i].tanggal != 0 && now.Day() != 0) ||  (int(now.Month())-tab[i].bulan > 0 && now.Year()-tab[i].tahun >= 0 && tab[i].tanggal != 0 && now.Day() != 0){
 			fmt.Printf("PERINGATAN: %s TELAH KADALUARSA PADA TANGGAL %02d/%02d/%04d\n", tab[i].nama, tab[i].tanggal, tab[i].bulan, tab[i].tahun)
 			found = true
 		}
@@ -362,8 +367,9 @@ func cariBahan(T tabMakanan, n int, id string) {
 	ketemu = false
 	for i := 0; i < n; i++ {
 		if T[i].id == id {
-			fmt.Println("			Data Ditemukan		   ")
+			fmt.Println("Data Ditemukan")
 			fmt.Println("----------------------------------")
+			fmt.Printf("Id bahan makanan: %s\n", T[i].id)
 			fmt.Printf("Nama bahan makanan: %s\n", T[i].nama)
 			fmt.Printf("Stok Yang Tersedia: %d\n", T[i].stok-T[i].stokTergunakan)
 			fmt.Printf("Stok Awal: %d\n", T[i].stok)
@@ -474,6 +480,7 @@ func stokTerbanyak(T tabMakanan, n int) {
 	fmt.Println("---------------")
 	fmt.Println("Stok Terbanyak")
 	fmt.Println("--------------")
+	fmt.Printf("Id bahan makanan: %s\n", T[idx].id)
 	fmt.Printf("Nama bahan makanan: %s\n", T[idx].nama)
 	fmt.Printf("Stok Yang Tersedia: %d\n", T[idx].stok-T[idx].stokTergunakan)
 	fmt.Printf("Stok Awal: %d\n", T[idx].stok)
@@ -492,6 +499,7 @@ func stokTersedikit(T tabMakanan, n int) {
 	fmt.Println("---------------")
 	fmt.Println("Stok Tersedikit")
 	fmt.Println("---------------")
+	fmt.Printf("Id bahan makanan: %s\n", T[idx].id)
 	fmt.Printf("Nama bahan makanan: %s\n", T[idx].nama)
 	fmt.Printf("Stok Yang Tersedia: %d\n", T[idx].stok-T[idx].stokTergunakan)
 	fmt.Printf("Stok Awal: %d\n", T[idx].stok)
